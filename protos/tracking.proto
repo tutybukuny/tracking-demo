@@ -1,0 +1,39 @@
+syntax = "proto3";
+package tracking;
+
+enum VehicleState {
+  OUT_OF_FUEL = 0;
+  TRAFFIC_JAM = 1;
+}
+
+message Vehicle {
+  int32 id = 1;
+  string name = 2;
+  string vehicle = 3;
+}
+
+message Point {
+  int32 latitude = 1;
+  int32 longitude = 2;
+}
+
+message Track {
+  Vehicle vehicle = 1;
+  Point point = 2;
+  VehicleState state = 3;
+}
+
+message Trip {
+  int32 id = 1;
+  repeated Track track = 2;
+}
+
+message JoinTrip {
+  Trip trip = 1;
+  Vehicle vehicle = 2;
+}
+
+service Tracking {
+  rpc SyncTrip(JoinTrip) returns (stream Track) {}
+  rpc SendTrack(Track) returns (Track) {}
+}
